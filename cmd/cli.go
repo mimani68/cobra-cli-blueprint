@@ -24,17 +24,19 @@ var restApiCmd = &cobra.Command{
 	},
 }
 
+// $ a console --username mahdi --password 123
 var consoleCmd = &cobra.Command{
 	Use:     "console",
-	Aliases: []string{"c", "co"},
-	Short:   "Console application",
+	Aliases: []string{"c", "cli"},
+	Short:   "Console envirnoment",
 	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) > 0 && args[0] == "mahdi" {
+		// $ a console --username mahdi --password 123 db-list
+		if len(args) > 0 && args[0] == "db-list" {
 			param = new(string)
-			*param = "(1) " + args[0]
+			*param = "(1) mysql"
 		} else {
 			param = new(string)
-			*param = "(0) " + args[0]
+			*param = "[x]"
 		}
 		return nil
 	},
@@ -47,6 +49,8 @@ var consoleCmd = &cobra.Command{
 	},
 }
 
+// Child command `console` > `db`
+// a console --username mahdi --password 123 db
 var consoleDbCmd = &cobra.Command{
 	Use:   "db",
 	Short: "Managing database",
@@ -57,12 +61,12 @@ var consoleDbCmd = &cobra.Command{
 
 func init() {
 	status = new(string)
-	restApiCmd.PersistentFlags().StringVar(status, "status", "UNKNOWN", "check result")
+	restApiCmd.PersistentFlags().StringVar(status, "status", "UNKNOWN", "Check status of server")
 
 	username = new(string)
 	password = new(string)
 	consoleCmd.PersistentFlags().StringVar(username, "username", "", "User identity username")
-	consoleCmd.PersistentFlags().StringVar(password, "password", "", "user cerdential")
+	consoleCmd.PersistentFlags().StringVar(password, "password", "", "User cerdential")
 	consoleCmd.MarkPersistentFlagRequired("username")
 	consoleCmd.MarkPersistentFlagRequired("password")
 
